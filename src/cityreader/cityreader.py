@@ -109,4 +109,5 @@ lon1=float(coords1.split(',')[1])
 lat2=float(coords2.split(',')[0])
 lon2=float(coords2.split(',')[1])
 
-print(cityreader_stretch(lat1, lon1, lat2, lon2, cities))
+for city in (cityreader_stretch(lat1, lon1, lat2, lon2, cities)):
+    print(city)
