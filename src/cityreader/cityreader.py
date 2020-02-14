@@ -22,7 +22,7 @@ class City:
         self.lon = lon
 
     def  __repr__(self):
-        return f'{self.name}:  {self.lat}, {self.lon}'
+        return f'{self.name}: ({self.lat}, {self.lon})'
 
 
 cities = []
@@ -36,7 +36,7 @@ def cityreader(cities=[]):
     with open('cities.csv', newline='') as csvfile:
         directory = csv.DictReader(csvfile)
         for city in directory:
-            cities.append(City(city['city'], city['lat'], city['lng']))
+            cities.append(City(city['city'], float(city['lat']), float(city['lng'])))
 
 
     return cities
@@ -82,8 +82,31 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
 
+  minlat = min(lat1, lat2)
+  maxlat = max(lat1, lat2)
+  minlon = min(lon1, lon2)
+  maxlon = max(lon1, lon2)
+
+  for city in cities:
+      if city.lat >= minlat and city.lat <= maxlat and city.lon >= minlon and city.lon <= maxlon:
+          within.append(city)
+  
+
+
+
+
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
   return within
+
+coords1 = input("Enter lat1, lon1: ")
+coords2 = input("Enter lat2, lon2: ")
+
+lat1=float(coords1.split(',')[0])
+lon1=float(coords1.split(',')[1])
+lat2=float(coords2.split(',')[0])
+lon2=float(coords2.split(',')[1])
+
+print(cityreader_stretch(lat1, lon1, lat2, lon2, cities))
