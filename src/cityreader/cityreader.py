@@ -14,13 +14,31 @@
 #
 # Note that the first line of the CSV is header that describes the fields--this
 # should not be loaded into a City object.
+
+class City:
+    def __init__(self, name, lat, lon):
+        self.name = name
+        self.lat = lat
+        self.lon = lon
+
+    def  __repr__(self):
+        return f'{self.name}: ({self.lat}, {self.lon})'
+
+
 cities = []
 
 def cityreader(cities=[]):
   # TODO Implement the functionality to read from the 'cities.csv' file
   # For each city record, create a new City instance and add it to the 
   # `cities` list
-    
+
+    import csv
+    with open('cities.csv', newline='') as csvfile:
+        directory = csv.DictReader(csvfile)
+        for city in directory:
+            cities.append(City(city['city'], float(city['lat']), float(city['lng'])))
+
+
     return cities
 
 cityreader(cities)
@@ -64,8 +82,32 @@ def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
   # within will hold the cities that fall within the specified region
   within = []
 
+  minlat = min(lat1, lat2)
+  maxlat = max(lat1, lat2)
+  minlon = min(lon1, lon2)
+  maxlon = max(lon1, lon2)
+
+  for city in cities:
+      if city.lat >= minlat and city.lat <= maxlat and city.lon >= minlon and city.lon <= maxlon:
+          within.append(city)
+  
+
+
+
+
   # TODO Ensure that the lat and lon valuse are all floats
   # Go through each city and check to see if it falls within 
   # the specified coordinates.
 
   return within
+
+coords1 = input("Enter lat1, lon1: ")
+coords2 = input("Enter lat2, lon2: ")
+
+lat1=float(coords1.split(',')[0])
+lon1=float(coords1.split(',')[1])
+lat2=float(coords2.split(',')[0])
+lon2=float(coords2.split(',')[1])
+
+for city in (cityreader_stretch(lat1, lon1, lat2, lon2, cities)):
+    print(city)
